@@ -1,0 +1,903 @@
+<< 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ficha de Trabajo — Cuando volvamos a brotar</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap');
+
+    :root {
+      --forest: #1A2A1A;
+      --green: #3D6B35;
+      --sage: #6B9E5E;
+      --amber: #C8873A;
+      --cream: #F7F2E8;
+      --sand: #E8E0CC;
+      --muted: #7A7060;
+      --dark: #1A2A1A;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Source Sans 3', sans-serif;
+      background: #f0ece4;
+      color: var(--dark);
+      font-size: 11pt;
+      line-height: 1.5;
+    }
+
+    /* ─── NAV ─── */
+    .page-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: var(--forest);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 24px;
+      z-index: 100;
+      font-size: 9pt;
+      font-family: 'Source Sans 3', sans-serif;
+    }
+    .page-nav-title {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--sage);
+      font-size: 10pt;
+    }
+    .page-tabs { display: flex; gap: 4px; }
+    .page-tab {
+      padding: 4px 14px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 8.5pt;
+      color: #aaa;
+      transition: background 0.15s, color 0.15s;
+      border: none;
+      background: transparent;
+      font-family: 'Source Sans 3', sans-serif;
+    }
+    .page-tab:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .page-tab.active { background: var(--amber); color: #fff; }
+
+    /* ─── PAGE ─── */
+    .page-wrapper { padding-top: 52px; padding-bottom: 60px; min-height: 100vh; }
+    .page {
+      display: none;
+      max-width: 210mm;
+      margin: 24px auto;
+      background: #fff;
+      padding: 14mm 16mm;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    }
+    .page.active { display: block; }
+
+    /* ─── HEADER ─── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 3px solid var(--green);
+      padding-bottom: 10px;
+      margin-bottom: 14px;
+    }
+    .obra-tag { font-size: 8pt; color: var(--sage); font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2px; }
+    .obra-title { font-family: 'Playfair Display', serif; font-size: 18pt; font-weight: 700; color: var(--forest); line-height: 1.1; }
+    .obra-subtitle { font-size: 9pt; color: var(--muted); margin-top: 2px; }
+    .header-right { text-align: right; font-size: 9pt; color: var(--muted); }
+    .ficha-label { font-size: 8pt; letter-spacing: 2px; text-transform: uppercase; color: var(--amber); font-weight: 600; margin-bottom: 2px; }
+
+    /* ─── BIENVENIDA ─── */
+    .bienvenida {
+      background: linear-gradient(135deg, var(--forest) 0%, #2a4a2a 100%);
+      color: var(--cream);
+      border-radius: 4px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .bienvenida::before {
+      content: '✦';
+      position: absolute;
+      right: 16px; top: 10px;
+      font-size: 28pt;
+      color: rgba(107,158,94,0.2);
+      line-height: 1;
+    }
+    .bienvenida-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 10pt;
+      font-style: italic;
+      color: var(--sage);
+      letter-spacing: 1px;
+      margin-bottom: 7px;
+    }
+    .bienvenida p {
+      font-size: 9.5pt;
+      line-height: 1.65;
+      color: #ddd8cc;
+      margin-bottom: 6px;
+    }
+    .bienvenida p:last-child { margin-bottom: 0; }
+    .bienvenida strong { color: var(--cream); }
+    .bienvenida em { color: var(--sage); font-style: normal; }
+
+    /* ─── IDENTITY ─── */
+    .identity {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      background: var(--cream);
+      border-left: 4px solid var(--amber);
+      padding: 10px 14px;
+      margin-bottom: 14px;
+    }
+    .field-label { font-size: 7.5pt; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+    .field-input {
+      border: none;
+      border-bottom: 1.5px solid var(--green);
+      width: 100%; height: 24px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 10pt; color: var(--dark);
+      background: transparent; outline: none;
+    }
+
+    /* ─── SECTION ─── */
+    .section-header { display: flex; align-items: center; gap: 8px; margin: 14px 0 8px; }
+    .section-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--amber); flex-shrink: 0; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 12pt; font-weight: 700; color: var(--forest); text-transform: uppercase; letter-spacing: 1px; }
+    .section-subtitle { font-size: 8.5pt; color: var(--muted); font-style: italic; margin-left: 18px; margin-bottom: 8px; }
+
+    /* ─── SUPERTAREA ─── */
+    .supertarea-block { background: var(--forest); color: var(--cream); padding: 10px 14px; margin-bottom: 14px; }
+    .supertarea-label { font-size: 7.5pt; letter-spacing: 2px; text-transform: uppercase; color: var(--sage); font-weight: 600; margin-bottom: 5px; }
+    .supertarea-input {
+      border: none; border-bottom: 1.5px solid var(--sage);
+      width: 100%; height: 28px;
+      font-family: 'Source Sans 3', sans-serif; font-size: 10pt;
+      color: var(--cream); background: transparent; outline: none; margin-bottom: 6px;
+    }
+    .supertarea-input::placeholder { color: rgba(107,158,94,0.5); font-style: italic; }
+    .supertarea-hint { font-size: 8pt; color: var(--sage); font-style: italic; }
+
+    /* ─── ESCENA TABLE ─── */
+    .escena-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+    .escena-table th {
+      background: var(--green); color: #fff; font-size: 8.5pt;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 6px 8px; text-align: left; font-weight: 600;
+    }
+    .escena-table td { border-bottom: 1px solid var(--sand); padding: 4px 6px; vertical-align: middle; }
+    .escena-table tr:nth-child(even) td { background: var(--cream); }
+    .td-num { width: 28px; text-align: center; font-size: 8pt; color: var(--muted); font-weight: 600; }
+    .td-input {
+      width: 100%; border: none; border-bottom: 1px solid #BBBBAA;
+      background: transparent; height: 26px;
+      font-family: 'Source Sans 3', sans-serif; font-size: 9.5pt; color: var(--dark); outline: none;
+    }
+    .td-input.small { font-size: 8.5pt; }
+    .td-remove { width: 24px; text-align: center; }
+    .btn-remove-row { background: none; border: none; color: #ccc; cursor: pointer; font-size: 14pt; line-height: 1; padding: 0; transition: color 0.15s; }
+    .btn-remove-row:hover { color: #c0392b; }
+
+    .add-row-btn {
+      display: flex; align-items: center; gap: 6px;
+      background: none; border: 1.5px dashed var(--green);
+      color: var(--green); font-family: 'Source Sans 3', sans-serif;
+      font-size: 9pt; cursor: pointer; padding: 6px 14px;
+      border-radius: 3px; margin-bottom: 14px; transition: background 0.15s;
+    }
+    .add-row-btn:hover { background: var(--cream); }
+
+    /* ─── PARTITURA ─── */
+    .par-row { display: grid; grid-template-columns: 130px 1fr 1fr 1fr 24px; border-bottom: 1px solid var(--sand); min-height: 40px; align-items: end; }
+    .par-cell { padding: 0 6px 4px; }
+    .par-input {
+      width: 100%; border: none; border-bottom: 1px solid #BBBBAA;
+      background: transparent; height: 26px;
+      font-family: 'Source Sans 3', sans-serif; font-size: 9.5pt; color: var(--dark); outline: none;
+    }
+    .par-remove-cell { padding-bottom: 4px; display: flex; align-items: flex-end; }
+
+    /* ─── PREGUNTAS ─── */
+    .pregunta-block { margin-bottom: 14px; }
+    .pregunta-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 20px; height: 20px; background: var(--amber); color: white;
+      border-radius: 50%; font-size: 9pt; font-weight: 700; margin-right: 6px; flex-shrink: 0;
+    }
+    .pregunta-text { font-size: 10pt; color: var(--forest); font-weight: 600; display: flex; align-items: baseline; margin-bottom: 3px; }
+    .pregunta-hint { font-size: 8.5pt; color: var(--muted); font-style: italic; margin-left: 26px; margin-bottom: 6px; }
+    .answer-textarea {
+      width: 100%; border: 1px solid var(--sand); border-radius: 3px;
+      background: var(--cream); font-family: 'Source Sans 3', sans-serif;
+      font-size: 10pt; color: var(--dark); padding: 8px 10px; resize: vertical;
+      min-height: 64px; outline: none; line-height: 1.6; transition: border-color 0.15s;
+    }
+    .answer-textarea:focus { border-color: var(--green); background: #fff; }
+
+    /* ─── NOTAS / IMÁGENES ─── */
+    .notas-textarea {
+      width: 100%; border: 1px solid var(--sand); border-radius: 3px;
+      background: var(--cream); font-family: 'Source Sans 3', sans-serif;
+      font-size: 10pt; color: var(--dark); padding: 10px; resize: vertical;
+      min-height: 100px; outline: none; line-height: 1.7; transition: border-color 0.15s;
+      margin-top: 6px;
+    }
+    .notas-textarea:focus { border-color: var(--green); background: #fff; }
+
+    .img-upload-area {
+      border: 2px dashed var(--sand); border-radius: 4px;
+      padding: 14px; margin-top: 10px; text-align: center; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: var(--cream);
+    }
+    .img-upload-area:hover { border-color: var(--sage); background: #f0f5ee; }
+    .img-upload-label { font-size: 8.5pt; color: var(--muted); font-style: italic; display: block; margin-bottom: 6px; }
+    .img-upload-label strong { color: var(--green); font-style: normal; }
+    .img-upload-btn {
+      display: inline-block; padding: 5px 14px; background: none;
+      border: 1.5px solid var(--green); color: var(--green);
+      font-family: 'Source Sans 3', sans-serif; font-size: 8.5pt; font-weight: 600;
+      border-radius: 3px; cursor: pointer; transition: background 0.15s;
+    }
+    .img-upload-btn:hover { background: var(--cream); }
+    #img-file-input { display: none; }
+
+    .img-gallery { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .img-thumb {
+      position: relative; width: 90px; height: 90px;
+      border: 1.5px solid var(--sand); border-radius: 3px; overflow: hidden;
+    }
+    .img-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .img-thumb-remove {
+      position: absolute; top: 2px; right: 2px;
+      background: rgba(0,0,0,0.55); color: #fff; border: none;
+      border-radius: 50%; width: 18px; height: 18px; font-size: 10pt;
+      line-height: 18px; text-align: center; cursor: pointer; padding: 0;
+    }
+
+    /* ─── TIP BOX ─── */
+    .tip-box { border-left: 3px solid var(--amber); background: var(--cream); padding: 8px 12px; margin: 8px 0; font-size: 9.5pt; color: var(--dark); }
+    .tip-box strong { color: var(--amber); }
+    .divider { border: none; border-top: 1.5px solid var(--sand); margin: 12px 0; }
+
+    /* ─── FOOTER ─── */
+    .footer { margin-top: 16px; border-top: 1px solid var(--sand); padding-top: 8px; font-size: 8pt; color: var(--muted); display: flex; justify-content: space-between; }
+
+    /* ─── PAGE NAV BUTTONS ─── */
+    .page-nav-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding-top: 14px;
+      border-top: 1.5px solid var(--sand);
+      gap: 12px;
+    }
+    .btn-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 22px;
+      border-radius: 3px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 9.5pt;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.4px;
+      transition: background 0.15s, color 0.15s, opacity 0.15s;
+      border: none;
+      text-decoration: none;
+    }
+    .btn-nav-prev {
+      background: transparent;
+      color: var(--green);
+      border: 1.5px solid var(--green);
+    }
+    .btn-nav-prev:hover { background: var(--cream); }
+    .btn-nav-prev:disabled { opacity: 0.3; cursor: default; }
+
+    .btn-nav-next {
+      background: var(--green);
+      color: #fff;
+      border: 1.5px solid var(--green);
+    }
+    .btn-nav-next:hover { background: #2e5228; }
+
+    .btn-nav-submit {
+      background: var(--amber);
+      color: #fff;
+      border: 1.5px solid var(--amber);
+    }
+    .btn-nav-submit:hover { background: #b8772a; }
+
+    .page-indicator {
+      font-size: 8.5pt;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ─── SAVE BAR ─── */
+    .save-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: var(--forest); padding: 8px 24px;
+      display: flex; align-items: center; justify-content: flex-end; gap: 12px; z-index: 100;
+    }
+    .save-status { font-size: 8.5pt; color: var(--sage); font-style: italic; }
+    .btn-save {
+      background: transparent; color: var(--sage); border: 1px solid var(--sage);
+      font-family: 'Source Sans 3', sans-serif; font-size: 9pt; font-weight: 600;
+      padding: 5px 14px; border-radius: 3px; cursor: pointer; letter-spacing: 0.5px; transition: background 0.15s;
+    }
+    .btn-save:hover { background: rgba(107,158,94,0.15); }
+
+    /* ─── SUCCESS PAGE ─── */
+    #success-page {
+      display: none;
+      max-width: 210mm;
+      margin: 24px auto;
+      background: #fff;
+      padding: 14mm 16mm;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      text-align: center;
+    }
+    .success-icon { font-size: 48pt; margin-bottom: 16px; }
+    .success-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20pt;
+      color: var(--forest);
+      margin-bottom: 10px;
+    }
+    .success-msg { font-size: 11pt; color: var(--muted); line-height: 1.7; }
+
+    @media (max-width: 640px) {
+      .page { margin: 8px; padding: 8mm 6mm; }
+      .identity { grid-template-columns: 1fr; }
+      .par-row { grid-template-columns: 90px 1fr 1fr; }
+      .par-row .par-cell:nth-child(4), .par-row .par-remove-cell { display: none; }
+      .page-nav-title { display: none; }
+      .btn-nav { padding: 8px 14px; font-size: 9pt; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="page-nav">
+  <span class="page-nav-title">Cuando volvamos a brotar</span>
+  <div class="page-tabs">
+    <button class="page-tab active" onclick="goTo(0)">Pág. 1 — Supertarea</button>
+    <button class="page-tab" onclick="goTo(1)">Pág. 2 — Partitura</button>
+    <button class="page-tab" onclick="goTo(2)">Pág. 3 — Preguntas</button>
+  </div>
+  <span style="font-size:8pt; color:#aaa; min-width:120px; text-align:right;">Ficha de trabajo</span>
+</nav>
+
+<div class="page-wrapper">
+
+<!-- ═══════════════════════ FORMULARIO PRINCIPAL ═══════════════════════ -->
+<!-- IMPORTANTE: reemplazá TU_EMAIL@EJEMPLO.COM con tu email real antes de subir -->
+<form id="main-form"
+      action="https://api.web3forms.com/submit"
+      method="POST">
+<!-- ==================== CAMPOS OBLIGATORIOS PARA WEB3FORMS ==================== -->
+  <input type="hidden" name="access_key" value="5d1b859b-35a7-4efd-b9e7-467be81a6ff1">
+  
+  <!-- Datos del email que recibirás -->
+  <input type="hidden" name="subject" value="Nueva ficha — Cuando volvamos a brotar">
+  <input type="hidden" name="from_name" value="Ficha de Trabajo - Cuando volvamos a brotar">
+  <input type="hidden" name="email" value="claudioclaude24@gmail.com">
+
+  <!-- Redirección después de enviar (opcional pero recomendado) -->
+  <!-- Descomenta y cambia la URL cuando tengas página de gracias -->
+  <!-- <input type="hidden" name="_next" value="https://tudominio.com/gracias.html"> -->
+
+  <!-- Protección anti-spam -->
+  <input type="checkbox" name="botcheck" id="botcheck" style="display:none;">
+
+<!-- ═══════════════════════ PÁGINA 1 ═══════════════════════ -->
+<div class="page active" id="page-0">
+
+  <div class="header">
+    <div class="header-left">
+      <div class="obra-tag">El Musical</div>
+      <div class="obra-title">Cuando volvamos a brotar</div>
+      <div class="obra-subtitle">Idea y libro: Jimena Ramirez</div>
+    </div>
+    <div class="header-right">
+      <div class="ficha-label">Ficha de trabajo</div>
+      <div style="font-size:8.5pt; margin-top:2px;">Actuación - Prof. Coke Ruiz</div>
+    </div>
+  </div>
+
+  <!-- BIENVENIDA -->
+  <div class="bienvenida">
+    <div class="bienvenida-title">Antes de empezar, leé esto con calma.</div>
+    <p>Esta ficha es tuya. Completala <strong>sin apuro y sin pensar demasiado</strong>, la primera imagen que te viene a la cabeza suele ser la más honesta y la más poderosa. No hay respuestas correctas ni incorrectas. Lo que importa es que seas específico/a, que te explayes, que uses detalles concretos. Cuanto más vívido, mejor.</p>
+    <p>Esta es la <strong>primera noción que vamos a tener de tu personaje</strong> y nos va a ayudar a conocerlo juntos. Es el momento de imaginar, de explorar, de jugar sin límites.</p>
+    <p>Si en algún punto sentís miedo de equivocarte al construir el personaje, <em>escribilo igual, con más razón</em>. El miedo es buena señal: significa que estamos pisando territorio verdadero, que algo en vos ya sabe que estás por buen camino.</p>
+    <p>Y por último: <strong>los cambios van a venir, sí o sí</strong>. Durante el proceso el personaje va a mutar, a crecer, a sorprenderte. Eso es normal y es bueno. Todo lo que escribas hoy es solo el punto de partida.</p>
+    <p><em>Bienvenido/a a esta aventura.</em> Visualizate en el escenario brillando con todo el talento que tenés. <strong>TODOS</strong> los personajes tienen un montón para contar, y nuestro trabajo juntos es hacer que todo eso salga a la luz. 🌱</p>
+  </div>
+
+  <!-- IDENTITY -->
+  <div class="identity">
+    <div>
+      <div class="field-label">Nombre del actor/actriz</div>
+      <input class="field-input" type="text" id="id-actor" name="actor" placeholder="…">
+    </div>
+    <div>
+      <div class="field-label">Personaje que interpreta</div>
+      <input class="field-input" type="text" id="id-personaje" name="personaje" placeholder="…">
+    </div>
+    <div>
+      <div class="field-label">Fecha</div>
+      <input class="field-input" type="text" id="id-fecha" name="fecha" placeholder="…">
+    </div>
+  </div>
+
+  <!-- SUPERTAREA -->
+  <div class="section-header">
+    <div class="section-dot"></div>
+    <div class="section-title">Supertarea del personaje</div>
+  </div>
+  <div class="section-subtitle">El deseo más profundo. Lo que quiere en toda la obra, no solo en una escena.</div>
+
+  <div class="supertarea-block">
+    <div class="supertarea-label">Mi personaje quiere, en toda la obra...</div>
+    <input class="supertarea-input" type="text" id="supertarea" name="supertarea" placeholder="Formulalo como acción: verbo + objeto…">
+    <div class="supertarea-hint">Ej.: "Demostrar que puede sobrevivir sin nadie"</div>
+  </div>
+
+  <!-- OBJETIVOS POR ESCENA -->
+  <div class="section-header">
+    <div class="section-dot"></div>
+    <div class="section-title">Objetivos y acciones por escena</div>
+  </div>
+  <div class="section-subtitle">Completá una fila por escena en la que aparece tu personaje.</div>
+
+  <div class="tip-box">
+    <strong>Acordate:</strong> La acción responde a "¿qué quiere mi personaje conseguir en esta escena?" No es un estado (<em>estar triste</em>), es un verbo con objeto (<em>convencer a Girasol de que se quede</em>).
+  </div>
+
+  <table class="escena-table" id="escenas-table">
+    <thead>
+      <tr>
+        <th class="td-num">#</th>
+        <th style="width:90px">Escena</th>
+        <th>Objetivo (¿qué quiere?)</th>
+        <th>Acción concreta (verbo + objeto)</th>
+        <th style="width:80px">Con quién / contra quién</th>
+        <th style="width:24px"></th>
+      </tr>
+    </thead>
+    <tbody id="escenas-tbody"></tbody>
+  </table>
+
+  <button type="button" class="add-row-btn" onclick="addEscenaRow()">
+    <span style="font-size:14pt; line-height:1">+</span> Agregar escena
+  </button>
+
+  <div class="footer">
+    <span>Taller de Técnica de Teatro Musical — FGD/TIA 2026</span>
+    <span>Ficha de trabajo — Objetivos y Acciones · Pág. 1</span>
+  </div>
+
+  <!-- BOTONES DE NAVEGACIÓN -->
+  <div class="page-nav-buttons">
+    <button type="button" class="btn-nav btn-nav-prev" disabled>← Anterior</button>
+    <span class="page-indicator">Página 1 de 3</span>
+    <button type="button" class="btn-nav btn-nav-next" onclick="goTo(1)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════ PÁGINA 2 ═══════════════════════ -->
+<div class="page" id="page-1">
+
+  <div class="header">
+    <div class="header-left">
+      <div class="obra-tag">Cuando volvamos a brotar</div>
+      <div class="obra-title" style="font-size:14pt;">Partitura de acciones</div>
+    </div>
+    <div class="header-right">
+      <div class="ficha-label">Ficha de trabajo</div>
+      <div style="font-size:8.5pt; margin-top:2px;">Actuación - Prof. Coke Ruiz</div>
+    </div>
+  </div>
+
+  <!-- PARTITURA -->
+  <div class="section-header">
+    <div class="section-dot"></div>
+    <div class="section-title">Partitura de intenciones</div>
+  </div>
+  <div class="section-subtitle">Para cada escena importante: ¿cómo intenta tu personaje conseguir lo que quiere? ¿Qué le impide lograrlo? ¿Cambia de táctica?</div>
+
+  <div style="display:grid; grid-template-columns: 130px 1fr 1fr 1fr 24px; border-top: 1.5px solid var(--sand); border-bottom: 1.5px solid var(--sand); padding: 4px 0; margin-bottom: 4px;">
+    <div style="font-size:7.5pt; color:var(--muted); text-transform:uppercase; letter-spacing:1px; padding:0 6px;">Escena</div>
+    <div style="font-size:7.5pt; color:var(--muted); text-transform:uppercase; letter-spacing:1px; padding:0 6px;">Intención / táctica</div>
+    <div style="font-size:7.5pt; color:var(--muted); text-transform:uppercase; letter-spacing:1px; padding:0 6px;">Obstáculo</div>
+    <div style="font-size:7.5pt; color:var(--muted); text-transform:uppercase; letter-spacing:1px; padding:0 6px;">¿Consigue lo que quiere?</div>
+    <div></div>
+  </div>
+
+  <div id="partitura-rows"></div>
+
+  <button type="button" class="add-row-btn" onclick="addPartituraRow()">
+    <span style="font-size:14pt; line-height:1">+</span> Agregar escena
+  </button>
+
+  <hr class="divider">
+
+  <!-- PREGUNTAS pág 2 -->
+  <div class="section-header">
+    <div class="section-dot"></div>
+    <div class="section-title">Preguntas de creación del personaje</div>
+  </div>
+  <div class="section-subtitle">Respondé con lo primero que te venga. No hay respuestas correctas.</div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">1</span>¿Qué le pasó a tu personaje antes de que empiece la obra?</div>
+    <div class="pregunta-hint">¿Qué perdió? ¿Qué esperaba que no llegó? ¿Qué cargó desde antes?</div>
+    <textarea class="answer-textarea" id="p1" name="p1_antes_de_la_obra" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">2</span>¿Qué es lo que más quiere tu personaje y no puede decir en voz alta?</div>
+    <div class="pregunta-hint">El deseo que esconde. La necesidad que no nombra.</div>
+    <textarea class="answer-textarea" id="p2" name="p2_deseo_secreto" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">3</span>¿Qué tiene miedo de perder?</div>
+    <div class="pregunta-hint">¿Su lugar en el jardín? ¿El recuerdo de cómo era? ¿A alguien?</div>
+    <textarea class="answer-textarea" id="p3" name="p3_miedo_a_perder" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">4</span>¿Cuándo fue la última vez que tu personaje fue feliz en el jardín?</div>
+    <div class="pregunta-hint">Una imagen concreta. Qué hacía, con quién, cómo estaba el jardín.</div>
+    <textarea class="answer-textarea" id="p4" name="p4_ultima_felicidad" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <div class="footer">
+    <span>Taller de Técnica de Teatro Musical — FGD/TIA 2026</span>
+    <span>Ficha de trabajo — Partitura y Preguntas · Pág. 2</span>
+  </div>
+
+  <!-- BOTONES DE NAVEGACIÓN -->
+  <div class="page-nav-buttons">
+    <button type="button" class="btn-nav btn-nav-prev" onclick="goTo(0)">← Anterior</button>
+    <span class="page-indicator">Página 2 de 3</span>
+    <button type="button" class="btn-nav btn-nav-next" onclick="goTo(2)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════ PÁGINA 3 ═══════════════════════ -->
+<div class="page" id="page-2">
+
+  <div class="header">
+    <div class="header-left">
+      <div class="obra-tag">Cuando volvamos a brotar</div>
+      <div class="obra-title" style="font-size:14pt;">Preguntas de creación</div>
+      <div class="obra-subtitle">Las RELACIONES, el ARCO y el CIERRE</div>
+    </div>
+    <div class="header-right">
+      <div class="ficha-label">Ficha de trabajo</div>
+      <div style="font-size:8.5pt; margin-top:2px;">Actuación - Prof. Coke Ruiz</div>
+    </div>
+  </div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">5</span>¿Quién es la persona más importante del jardín para tu personaje?</div>
+    <div class="pregunta-hint">¿Quién lo mueve, lo amenaza, lo calma o lo enloquece?</div>
+    <textarea class="answer-textarea" id="p5" name="p5_persona_mas_importante" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">6</span>¿Qué piensa tu personaje del Jardinero?</div>
+    <div class="pregunta-hint">¿Lo espera? ¿Le teme? ¿Lo odia? ¿Lo ignora? ¿Le importa?</div>
+    <textarea class="answer-textarea" id="p6" name="p6_jardinero" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">7</span>¿Tu personaje cree que el jardín va a volver a ser lo que era? ¿Por qué?</div>
+    <div class="pregunta-hint">Fe, desesperanza, indiferencia. ¿Desde dónde responde?</div>
+    <textarea class="answer-textarea" id="p7" name="p7_jardin_futuro" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">8</span>¿Qué cambió en tu personaje al final de la obra?</div>
+    <div class="pregunta-hint">No lo que le pasó. Lo que cambió adentro.</div>
+    <textarea class="answer-textarea" id="p8" name="p8_cambio_interno" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">9</span>¿Hay algo que tu personaje haría distinto si pudiera volver al principio?</div>
+    <textarea class="answer-textarea" id="p9" name="p9_haria_distinto" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <hr class="divider" style="margin-top:6px;">
+
+  <!-- NOTAS LIBRES -->
+  <div class="section-header">
+    <div class="section-dot" style="background: var(--sage);"></div>
+    <div class="section-title">Notas libres / Imágenes internas</div>
+  </div>
+  <div class="section-subtitle">Escribí, anotá ideas, canciones que te inspiran, sensaciones…</div>
+
+  <div class="tip-box" style="margin-bottom:10px;">
+    <strong>¿Qué tipo de imágenes podés subir?</strong> Algo que te evoque al personaje: una planta, un animal, una textura, una forma, un color.
+  </div>
+
+  <textarea class="notas-textarea" id="notas" name="notas_libres" placeholder="Espacio libre para escribir, anotar ideas, canciones que te inspiran, sensaciones…"></textarea>
+
+  <!-- Subida de imágenes (solo local, no se envía por email) -->
+  <div class="img-upload-area" onclick="document.getElementById('img-file-input').click()">
+    <span class="img-upload-label"><strong>Agregar imágenes de inspiración</strong> — plantas, animales, formas, dibujos, colores, texturas.<br><em>(Las imágenes se guardan solo en tu dispositivo, no se envían por email.)</em></span>
+    <button type="button" class="img-upload-btn">+ Elegir imágenes</button>
+  </div>
+  <input type="file" id="img-file-input" accept="image/*" multiple onchange="handleImgUpload(event)">
+  <div class="img-gallery" id="img-gallery"></div>
+
+  <div class="tip-box" style="margin-top: 10px;">
+    <strong>Recordá:</strong> La acción no es lo que sentís. Es lo que hacés para conseguir lo que querés. Cuando la acción es verdadera y genuina, el sentimiento viene solo.
+  </div>
+
+  <div class="footer">
+    <span>Taller de Técnica de Teatro Musical — FGD/TIA 2026</span>
+    <span>Ficha de trabajo — Preguntas de creación · Pág. 3</span>
+  </div>
+
+  <!-- BOTONES DE NAVEGACIÓN + ENVÍO -->
+  <div class="page-nav-buttons">
+    <button type="button" class="btn-nav btn-nav-prev" onclick="goTo(1)">← Anterior</button>
+    <span class="page-indicator">Página 3 de 3</span>
+    <button type="submit" class="btn-nav btn-nav-submit">Enviar ficha ✓</button>
+  </div>
+</div>
+
+</form><!-- fin del form -->
+<!-- SUCCESS PAGE -->
+<div id="success-page">
+  <div class="success-icon">🌱</div>
+  <div class="success-title">¡Ficha enviada con éxito!</div>
+  <p class="success-msg">
+    Gracias por completar tu ficha de trabajo.<br>
+    El profesor Coke Ruiz la recibirá pronto.
+  </p>
+  <button onclick="location.reload()" style="margin-top:20px; padding:10px 24px; background:var(--green); color:white; border:none; border-radius:4px; cursor:pointer;">
+    Completar otra ficha
+  </button>
+</div>
+</div><!-- end page-wrapper -->
+
+<div class="save-bar">
+  <span class="save-status" id="save-status"></span>
+  <button type="button" class="btn-save" onclick="saveData()">Guardar borrador</button>
+</div>
+
+<script>
+  // ── PAGINATION ──────────────────────────────────────────
+  let currentPage = 0;
+  const pages = document.querySelectorAll('.page');
+  const tabs  = document.querySelectorAll('.page-tab');
+
+  function goTo(n) {
+    pages[currentPage].classList.remove('active');
+    tabs[currentPage].classList.remove('active');
+    currentPage = n;
+    pages[currentPage].classList.add('active');
+    tabs[currentPage].classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    saveData(); // auto-guarda al cambiar de página
+  }
+
+  // ── ESCENA ROWS ─────────────────────────────────────────
+  let escenaCount = 0;
+  function addEscenaRow(vals) {
+    escenaCount++;
+    const n = escenaCount;
+    const tbody = document.getElementById('escenas-tbody');
+    const tr = document.createElement('tr');
+    tr.id = 'escena-row-' + n;
+    const v = vals || ['','','',''];
+    tr.innerHTML = `
+      <td class="td-num">${n}</td>
+      <td><input class="td-input" type="text" name="escena_${n}_nombre" data-key="escena-escena-${n}" placeholder="Escena…" value="${escapeHtml(v[0])}"></td>
+      <td><input class="td-input" type="text" name="escena_${n}_objetivo" data-key="escena-objetivo-${n}" placeholder="¿Qué quiere lograr?" value="${escapeHtml(v[1])}"></td>
+      <td><input class="td-input" type="text" name="escena_${n}_accion" data-key="escena-accion-${n}" placeholder="Verbo + objeto…" value="${escapeHtml(v[2])}"></td>
+      <td><input class="td-input small" type="text" name="escena_${n}_conquien" data-key="escena-conquien-${n}" placeholder="¿Con quién?" value="${escapeHtml(v[3])}"></td>
+      <td class="td-remove"><button type="button" class="btn-remove-row" title="Eliminar fila" onclick="removeEl('escena-row-${n}')">×</button></td>
+    `;
+    tbody.appendChild(tr);
+  }
+
+  // ── PARTITURA ROWS ──────────────────────────────────────
+  let partituraCount = 0;
+  function addPartituraRow(vals) {
+    partituraCount++;
+    const n = partituraCount;
+    const container = document.getElementById('partitura-rows');
+    const div = document.createElement('div');
+    div.className = 'par-row';
+    div.id = 'par-row-' + n;
+    const v = vals || ['','','',''];
+    div.innerHTML = `
+      <div class="par-cell"><input class="par-input" type="text" name="par_${n}_escena" data-key="par-escena-${n}" placeholder="Escena…" value="${escapeHtml(v[0])}"></div>
+      <div class="par-cell"><input class="par-input" type="text" name="par_${n}_intencion" data-key="par-intencion-${n}" placeholder="Táctica…" value="${escapeHtml(v[1])}"></div>
+      <div class="par-cell"><input class="par-input" type="text" name="par_${n}_obstaculo" data-key="par-obstaculo-${n}" placeholder="Obstáculo…" value="${escapeHtml(v[2])}"></div>
+      <div class="par-cell"><input class="par-input" type="text" name="par_${n}_logra" data-key="par-logra-${n}" placeholder="Sí / No / Parcialmente…" value="${escapeHtml(v[3])}"></div>
+      <div class="par-remove-cell"><button type="button" class="btn-remove-row" title="Eliminar fila" onclick="removeEl('par-row-${n}')">×</button></div>
+    `;
+    container.appendChild(div);
+  }
+
+  function removeEl(id) {
+    const el = document.getElementById(id);
+    if (el) el.remove();
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g,'&amp;')
+      .replace(/"/g,'&quot;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;');
+  }
+
+  // ── IMAGE UPLOAD ─────────────────────────────────────────
+  let uploadedImages = [];
+
+  function handleImgUpload(e) {
+    const files = Array.from(e.target.files);
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = function(ev) {
+        uploadedImages.push({ name: file.name, dataUrl: ev.target.result });
+        renderGallery();
+      };
+      reader.readAsDataURL(file);
+    });
+    e.target.value = '';
+  }
+
+  function renderGallery() {
+    const gallery = document.getElementById('img-gallery');
+    gallery.innerHTML = '';
+    uploadedImages.forEach((img, idx) => {
+      const div = document.createElement('div');
+      div.className = 'img-thumb';
+      div.innerHTML = `
+        <img src="${img.dataUrl}" alt="${img.name}">
+        <button type="button" class="img-thumb-remove" title="Eliminar imagen" onclick="removeImg(${idx})">×</button>
+      `;
+      gallery.appendChild(div);
+    });
+  }
+
+  function removeImg(idx) {
+    uploadedImages.splice(idx, 1);
+    renderGallery();
+  }
+
+  // ── SAVE / LOAD ─────────────────────────────────────────
+  function gatherData() {
+    const data = {};
+    ['id-actor','id-personaje','id-fecha','supertarea',
+     'p1','p2','p3','p4','p5','p6','p7','p8','p9','notas'
+    ].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) data[id] = el.value;
+    });
+    document.querySelectorAll('[data-key]').forEach(el => {
+      data[el.dataset.key] = el.value;
+    });
+    data['_escenaCount'] = escenaCount;
+    data['_partituraCount'] = partituraCount;
+    data['_images'] = uploadedImages;
+    return data;
+  }
+
+  function saveData() {
+    try {
+      const data = gatherData();
+      localStorage.setItem('ficha-brotar', JSON.stringify(data));
+      const status = document.getElementById('save-status');
+      status.textContent = 'Borrador guardado ✓';
+      setTimeout(() => status.textContent = '', 2500);
+    } catch(e) {
+      document.getElementById('save-status').textContent = 'Error al guardar (¿imágenes muy grandes?)';
+    }
+  }
+
+  function loadData() {
+    const raw = localStorage.getItem('ficha-brotar');
+    if (!raw) return;
+    const data = JSON.parse(raw);
+
+    const ec = data['_escenaCount'] || 0;
+    for (let i = 1; i <= ec; i++) {
+      addEscenaRow([
+        data[`escena-escena-${i}`] || '',
+        data[`escena-objetivo-${i}`] || '',
+        data[`escena-accion-${i}`] || '',
+        data[`escena-conquien-${i}`] || ''
+      ]);
+    }
+    const pc = data['_partituraCount'] || 0;
+    for (let i = 1; i <= pc; i++) {
+      addPartituraRow([
+        data[`par-escena-${i}`] || '',
+        data[`par-intencion-${i}`] || '',
+        data[`par-obstaculo-${i}`] || '',
+        data[`par-logra-${i}`] || ''
+      ]);
+    }
+
+    ['id-actor','id-personaje','id-fecha','supertarea',
+     'p1','p2','p3','p4','p5','p6','p7','p8','p9','notas'
+    ].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && data[id] !== undefined) el.value = data[id];
+    });
+    document.querySelectorAll('[data-key]').forEach(el => {
+      if (data[el.dataset.key] !== undefined) el.value = data[el.dataset.key];
+    });
+    if (data['_images']) {
+      uploadedImages = data['_images'];
+      renderGallery();
+    }
+  }
+
+  // ── INIT ────────────────────────────────────────────────
+  addEscenaRow(); addEscenaRow(); addEscenaRow(); addEscenaRow();
+  addPartituraRow(); addPartituraRow(); addPartituraRow(); addPartituraRow(); addPartituraRow();
+  loadData();
+
+
+  const form = document.getElementById('main-form');
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault(); // Evita envío normal
+
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Enviando ficha...';
+
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: new FormData(form)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        // Mostrar página de éxito
+        document.getElementById('success-page').style.display = 'block';
+        document.querySelector('.page-wrapper').style.display = 'none';
+        window.scrollTo(0, 0);
+      } else {
+        alert('Error al enviar: ' + (result.message || 'Inténtalo nuevamente'));
+      }
+    } catch (error) {
+      alert('Error de conexión. Verifica tu internet e inténtalo de nuevo.');
+    }
+
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalText;
+  });
+
+
+
+</script>
+</body>
+</html>
+HTMLEOF
