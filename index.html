@@ -1,3 +1,4 @@
+'HTMLEOF'
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -240,6 +241,12 @@
       font-size: 7pt; padding: 2px 4px; white-space: nowrap;
       overflow: hidden; text-overflow: ellipsis;
     }
+    .img-thumb-status {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.45);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 8pt; font-family: 'Source Sans 3', sans-serif;
+    }
 
     .size-meter { margin-top: 8px; font-size: 8.5pt; color: var(--muted); display: flex; align-items: center; gap: 8px; }
     .size-bar-bg { flex: 1; height: 6px; background: var(--sand); border-radius: 3px; overflow: hidden; }
@@ -258,7 +265,6 @@
     .tip-box { border-left: 3px solid var(--amber); background: var(--cream); padding: 8px 12px; margin: 8px 0; font-size: 9.5pt; color: var(--dark); }
     .tip-box strong { color: var(--amber); }
     .divider { border: none; border-top: 1.5px solid var(--sand); margin: 12px 0; }
-
     .footer { margin-top: 16px; border-top: 1px solid var(--sand); padding-top: 8px; font-size: 8pt; color: var(--muted); display: flex; justify-content: space-between; }
 
     .page-nav-buttons {
@@ -348,15 +354,15 @@
   <div class="identity">
     <div>
       <div class="field-label">Nombre del actor/actriz</div>
-      <input class="field-input" type="text" id="id-actor" name="actor" placeholder="…">
+      <input class="field-input" type="text" name="actor" placeholder="…">
     </div>
     <div>
       <div class="field-label">Personaje que interpreta</div>
-      <input class="field-input" type="text" id="id-personaje" name="personaje" placeholder="…">
+      <input class="field-input" type="text" name="personaje" placeholder="…">
     </div>
     <div>
       <div class="field-label">Fecha</div>
-      <input class="field-input" type="text" id="id-fecha" name="fecha" placeholder="…">
+      <input class="field-input" type="text" name="fecha" placeholder="…">
     </div>
   </div>
 
@@ -368,7 +374,7 @@
 
   <div class="supertarea-block">
     <div class="supertarea-label">Mi personaje quiere, en toda la obra...</div>
-    <input class="supertarea-input" type="text" id="supertarea" name="supertarea" placeholder="Formulalo como acción: verbo + objeto…">
+    <input class="supertarea-input" type="text" name="supertarea" placeholder="Formulalo como acción: verbo + objeto…">
     <div class="supertarea-hint">Ej.: "Demostrar que puede sobrevivir sin nadie"</div>
   </div>
 
@@ -382,7 +388,7 @@
     <strong>Acordate:</strong> La acción responde a "¿qué quiere mi personaje conseguir en esta escena?" No es un estado (<em>estar triste</em>), es un verbo con objeto (<em>convencer a Girasol de que se quede</em>).
   </div>
 
-  <table class="escena-table" id="escenas-table">
+  <table class="escena-table">
     <thead>
       <tr>
         <th class="td-num">#</th>
@@ -565,14 +571,13 @@
     </div>
   </div>
 
-  <div class="alert-error" id="alert-size">
-    ⚠ El total de imágenes supera los 4 MB. Por favor eliminá alguna antes de enviar.
-  </div>
-  <div class="alert-error" id="alert-count">
-    ⚠ Podés adjuntar como máximo 3 imágenes. Por favor eliminá las que sobran.
-  </div>
+  <div class="alert-error" id="alert-size">⚠ El total de imágenes supera los 4 MB. Por favor eliminá alguna antes de enviar.</div>
+  <div class="alert-error" id="alert-count">⚠ Podés adjuntar como máximo 3 imágenes. Por favor eliminá las que sobran.</div>
 
   <div class="img-gallery" id="img-gallery"></div>
+
+  <!-- URLs de Cloudinary — se completan automáticamente al enviar -->
+  <input type="hidden" id="imagenes_url" name="imagenes_inspiracion">
 
   <div class="tip-box" style="margin-top: 10px;">
     <strong>Recordá:</strong> La acción no es lo que sentís. Es lo que hacés para conseguir lo que querés. Cuando la acción es verdadera y genuina, el sentimiento viene solo.
@@ -608,10 +613,13 @@
 </div><!-- end page-wrapper -->
 
 <script>
-  // ── CONSTANTES ──────────────────────────────────────────
-  const FORMSPREE_URL = 'https://formspree.io/f/mojbrwpk';
-  const MAX_FILES     = 3;
-  const MAX_TOTAL_BYTES = 4 * 1024 * 1024;
+  // ── CONFIGURACIÓN ───────────────────────────────────────
+  const FORMSPREE_URL      = 'https://formspree.io/f/mojbrwpk';
+  const CLOUDINARY_CLOUD   = 'dl2kjnzcl';
+  const CLOUDINARY_PRESET  = 'ttm-personajes';
+  const CLOUDINARY_URL     = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`;
+  const MAX_FILES          = 3;
+  const MAX_TOTAL_BYTES    = 4 * 1024 * 1024;
 
   // ── PAGINATION ──────────────────────────────────────────
   let currentPage = 0;
@@ -630,15 +638,17 @@
   // ── HELPERS ─────────────────────────────────────────────
   function escapeHtml(str) {
     return String(str)
-      .replace(/&/g, '&amp;')
-      .replace(/"/g, '&quot;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+      .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+      .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function formatBytes(bytes) {
+    if (bytes < 1024)        return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
   }
 
   // ── TABLA DE ESCENAS ────────────────────────────────────
   let escenaCount = 0;
-
   function addEscenaRow() {
     escenaCount++;
     const n = escenaCount;
@@ -650,41 +660,30 @@
       <td><input class="td-input" type="text" name="escena_${n}_accion" placeholder="Verbo + objeto…"></td>
       <td><input class="td-input small" type="text" name="escena_${n}_con" placeholder="Con / contra…"></td>
       <td class="td-remove">
-        <button type="button" class="btn-remove-row" onclick="this.closest('tr').remove()" title="Eliminar fila">×</button>
-      </td>
-    `;
+        <button type="button" class="btn-remove-row" onclick="this.closest('tr').remove()">×</button>
+      </td>`;
     document.getElementById('escenas-tbody').appendChild(tr);
   }
 
-  // ── PARTITURA DE INTENCIONES ────────────────────────────
+  // ── PARTITURA ───────────────────────────────────────────
   let partituraCount = 0;
-
   function addPartituraRow() {
     partituraCount++;
     const n = partituraCount;
     const div = document.createElement('div');
     div.className = 'par-row';
     div.innerHTML = `
-      <div class="par-cell">
-        <input class="par-input" type="text" name="par_${n}_escena" placeholder="Escena…">
-      </div>
-      <div class="par-cell">
-        <input class="par-input" type="text" name="par_${n}_intencion" placeholder="Táctica…">
-      </div>
-      <div class="par-cell">
-        <input class="par-input" type="text" name="par_${n}_obstaculo" placeholder="Obstáculo…">
-      </div>
-      <div class="par-cell">
-        <input class="par-input" type="text" name="par_${n}_consigue" placeholder="¿Sí / No / Parcial?">
-      </div>
+      <div class="par-cell"><input class="par-input" type="text" name="par_${n}_escena" placeholder="Escena…"></div>
+      <div class="par-cell"><input class="par-input" type="text" name="par_${n}_intencion" placeholder="Táctica…"></div>
+      <div class="par-cell"><input class="par-input" type="text" name="par_${n}_obstaculo" placeholder="Obstáculo…"></div>
+      <div class="par-cell"><input class="par-input" type="text" name="par_${n}_consigue" placeholder="¿Sí / No / Parcial?"></div>
       <div class="par-remove-cell">
-        <button type="button" class="btn-remove-row" onclick="this.closest('.par-row').remove()" title="Eliminar fila">×</button>
-      </div>
-    `;
+        <button type="button" class="btn-remove-row" onclick="this.closest('.par-row').remove()">×</button>
+      </div>`;
     document.getElementById('partitura-rows').appendChild(div);
   }
 
-  // ── INIT: filas iniciales ────────────────────────────────
+  // ── INIT ────────────────────────────────────────────────
   for (let i = 0; i < 4; i++) addEscenaRow();
   for (let i = 0; i < 5; i++) addPartituraRow();
 
@@ -694,17 +693,15 @@
   function handleImgUpload(e) {
     const newFiles = Array.from(e.target.files);
     e.target.value = '';
-
     newFiles.forEach(file => {
       if (!file.type.startsWith('image/')) return;
       if (file.size > 2 * 1024 * 1024) {
-        alert(`La imagen "${file.name}" es demasiado grande (máximo 2 MB por imagen).`);
+        alert(`"${file.name}" es demasiado grande (máximo 2 MB por imagen).`);
         return;
       }
       if (uploadedFiles.find(u => u.file.name === file.name && u.file.size === file.size)) return;
       uploadedFiles.push({ file, previewUrl: URL.createObjectURL(file) });
     });
-
     validateAndRender();
   }
 
@@ -715,19 +712,15 @@
   }
 
   function validateAndRender() {
-    const alertSize  = document.getElementById('alert-size');
-    const alertCount = document.getElementById('alert-count');
-    const submitBtn  = document.getElementById('submit-btn');
-    const meter      = document.getElementById('size-meter-container');
-
     const totalBytes = uploadedFiles.reduce((acc, u) => acc + u.file.size, 0);
     const overSize   = totalBytes > MAX_TOTAL_BYTES;
     const overCount  = uploadedFiles.length > MAX_FILES;
 
-    alertSize.classList.toggle('visible', overSize);
-    alertCount.classList.toggle('visible', overCount);
-    submitBtn.disabled = overSize || overCount;
+    document.getElementById('alert-size').classList.toggle('visible', overSize);
+    document.getElementById('alert-count').classList.toggle('visible', overCount);
+    document.getElementById('submit-btn').disabled = overSize || overCount;
 
+    const meter = document.getElementById('size-meter-container');
     if (uploadedFiles.length > 0) {
       meter.style.display = 'block';
       const pct = Math.min((totalBytes / MAX_TOTAL_BYTES) * 100, 100);
@@ -740,7 +733,6 @@
     } else {
       meter.style.display = 'none';
     }
-
     renderGallery();
   }
 
@@ -753,49 +745,76 @@
       div.innerHTML = `
         <img src="${u.previewUrl}" alt="${escapeHtml(u.file.name)}">
         <button type="button" class="img-thumb-remove" onclick="removeImg(${idx})">×</button>
-        <span class="img-thumb-name">${escapeHtml(u.file.name)}</span>
-      `;
+        <span class="img-thumb-name">${escapeHtml(u.file.name)}</span>`;
       gallery.appendChild(div);
     });
   }
 
-  function formatBytes(bytes) {
-    if (bytes < 1024)        return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+  // ── SUBIR IMAGEN A CLOUDINARY ───────────────────────────
+  async function uploadToCloudinary(file) {
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('upload_preset', CLOUDINARY_PRESET);
+    const res  = await fetch(CLOUDINARY_URL, { method: 'POST', body: fd });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error?.message || 'Error Cloudinary');
+    return data.secure_url;
   }
 
-  // ── SUBMIT via Formspree ─────────────────────────────────
+  // ── SUBMIT ───────────────────────────────────────────────
   async function submitForm() {
     const totalBytes = uploadedFiles.reduce((acc, u) => acc + u.file.size, 0);
     if (totalBytes > MAX_TOTAL_BYTES || uploadedFiles.length > MAX_FILES) {
-      goTo(2);
-      return;
+      goTo(2); return;
     }
 
     const submitBtn = document.getElementById('submit-btn');
     submitBtn.disabled = true;
-    submitBtn.innerHTML = 'Enviando ficha…';
-
-    // Armar FormData desde el form + archivos separados
-    const form = document.getElementById('main-form');
-    const fd   = new FormData(form);
-
-    // Agregar imágenes con el nombre que Formspree espera para adjuntos
-    uploadedFiles.forEach((u, idx) => {
-      fd.append('attachment', u.file, u.file.name);
-    });
 
     try {
-      const response = await fetch(FORMSPREE_URL, {
+      // 1. Subir imágenes a Cloudinary (si hay)
+      let imageUrls = [];
+      if (uploadedFiles.length > 0) {
+        submitBtn.innerHTML = `Subiendo imágenes… (0/${uploadedFiles.length})`;
+        const gallery = document.getElementById('img-gallery');
+
+        for (let i = 0; i < uploadedFiles.length; i++) {
+          // Marcar thumbnail como "subiendo"
+          const thumb = gallery.children[i];
+          if (thumb) {
+            const overlay = document.createElement('div');
+            overlay.className = 'img-thumb-status';
+            overlay.textContent = 'Subiendo…';
+            thumb.appendChild(overlay);
+          }
+
+          const url = await uploadToCloudinary(uploadedFiles[i].file);
+          imageUrls.push(url);
+
+          // Marcar como listo
+          if (thumb) {
+            const overlay = thumb.querySelector('.img-thumb-status');
+            if (overlay) { overlay.textContent = '✓'; overlay.style.background = 'rgba(61,107,53,0.7)'; }
+          }
+
+          submitBtn.innerHTML = `Subiendo imágenes… (${i + 1}/${uploadedFiles.length})`;
+        }
+
+        // Guardar URLs en el campo oculto
+        document.getElementById('imagenes_url').value = imageUrls.join('\n');
+      }
+
+      // 2. Enviar a Formspree (solo texto + URLs)
+      submitBtn.innerHTML = 'Enviando ficha…';
+      const fd = new FormData(document.getElementById('main-form'));
+      const res = await fetch(FORMSPREE_URL, {
         method: 'POST',
         body: fd,
         headers: { 'Accept': 'application/json' }
       });
+      const result = await res.json();
 
-      const result = await response.json();
-
-      if (response.ok && result.ok) {
+      if (res.ok && result.ok) {
         document.getElementById('main-form').style.display = 'none';
         document.getElementById('success-page').style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -805,8 +824,9 @@
         submitBtn.disabled = false;
         submitBtn.innerHTML = 'Enviar ficha ✓';
       }
-    } catch (error) {
-      alert('Error de conexión. Verificá tu internet e intentá de nuevo.');
+
+    } catch (err) {
+      alert('Error: ' + err.message + '\nVerificá tu conexión e intentá de nuevo.');
       submitBtn.disabled = false;
       submitBtn.innerHTML = 'Enviar ficha ✓';
     }
@@ -814,3 +834,4 @@
 </script>
 </body>
 </html>
+HTMLEOF
