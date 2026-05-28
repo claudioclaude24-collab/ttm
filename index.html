@@ -99,8 +99,273 @@
       color: rgba(107,158,94,0.2);
     }
 
-    /* ... (Mantengo el resto de tus estilos tal como estaban, solo omití por brevedad aquí) ... */
-    /* Puedes copiar el resto de estilos desde tu versión anterior. Están correctos. */
+    .bienvenida-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 10pt;
+      font-style: italic;
+      color: var(--sage);
+      letter-spacing: 1px;
+      margin-bottom: 7px;
+    }
+    .bienvenida p {
+      font-size: 9.5pt;
+      line-height: 1.65;
+      color: #ddd8cc;
+      margin-bottom: 6px;
+    }
+    .bienvenida p:last-child { margin-bottom: 0; }
+    .bienvenida strong { color: var(--cream); }
+    .bienvenida em { color: var(--sage); font-style: normal; }
+
+    /* ─── IDENTITY ─── */
+    .identity {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      background: var(--cream);
+      border-left: 4px solid var(--amber);
+      padding: 10px 14px;
+      margin-bottom: 14px;
+    }
+    .field-label { font-size: 7.5pt; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
+    .field-input {
+      border: none;
+      border-bottom: 1.5px solid var(--green);
+      width: 100%; height: 24px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 10pt; color: var(--dark);
+      background: transparent; outline: none;
+    }
+
+    /* ─── SECTION ─── */
+    .section-header { display: flex; align-items: center; gap: 8px; margin: 14px 0 8px; }
+    .section-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--amber); flex-shrink: 0; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 12pt; font-weight: 700; color: var(--forest); text-transform: uppercase; letter-spacing: 1px; }
+    .section-subtitle { font-size: 8.5pt; color: var(--muted); font-style: italic; margin-left: 18px; margin-bottom: 8px; }
+
+    /* ─── SUPERTAREA ─── */
+    .supertarea-block { background: var(--forest); color: var(--cream); padding: 10px 14px; margin-bottom: 14px; }
+    .supertarea-label { font-size: 7.5pt; letter-spacing: 2px; text-transform: uppercase; color: var(--sage); font-weight: 600; margin-bottom: 5px; }
+    .supertarea-input {
+      border: none; border-bottom: 1.5px solid var(--sage);
+      width: 100%; height: 28px;
+      font-family: 'Source Sans 3', sans-serif; font-size: 10pt;
+      color: var(--cream); background: transparent; outline: none; margin-bottom: 6px;
+    }
+    .supertarea-input::placeholder { color: rgba(107,158,94,0.5); font-style: italic; }
+    .supertarea-hint { font-size: 8pt; color: var(--sage); font-style: italic; }
+
+    /* ─── ESCENA TABLE ─── */
+    .escena-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+    .escena-table th {
+      background: var(--green); color: #fff; font-size: 8.5pt;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 6px 8px; text-align: left; font-weight: 600;
+    }
+    .escena-table td { border-bottom: 1px solid var(--sand); padding: 4px 6px; vertical-align: middle; }
+    .escena-table tr:nth-child(even) td { background: var(--cream); }
+    .td-num { width: 28px; text-align: center; font-size: 8pt; color: var(--muted); font-weight: 600; }
+    .td-input {
+      width: 100%; border: none; border-bottom: 1px solid #BBBBAA;
+      background: transparent; height: 26px;
+      font-family: 'Source Sans 3', sans-serif; font-size: 9.5pt; color: var(--dark); outline: none;
+    }
+    .td-input.small { font-size: 8.5pt; }
+    .td-remove { width: 24px; text-align: center; }
+    .btn-remove-row { background: none; border: none; color: #ccc; cursor: pointer; font-size: 14pt; line-height: 1; padding: 0; transition: color 0.15s; }
+    .btn-remove-row:hover { color: #c0392b; }
+
+    .add-row-btn {
+      display: flex; align-items: center; gap: 6px;
+      background: none; border: 1.5px dashed var(--green);
+      color: var(--green); font-family: 'Source Sans 3', sans-serif;
+      font-size: 9pt; cursor: pointer; padding: 6px 14px;
+      border-radius: 3px; margin-bottom: 14px; transition: background 0.15s;
+    }
+    .add-row-btn:hover { background: var(--cream); }
+
+    /* ─── PARTITURA ─── */
+    .par-row { display: grid; grid-template-columns: 130px 1fr 1fr 1fr 24px; border-bottom: 1px solid var(--sand); min-height: 40px; align-items: end; }
+    .par-cell { padding: 0 6px 4px; }
+    .par-input {
+      width: 100%; border: none; border-bottom: 1px solid #BBBBAA;
+      background: transparent; height: 26px;
+      font-family: 'Source Sans 3', sans-serif; font-size: 9.5pt; color: var(--dark); outline: none;
+    }
+    .par-remove-cell { padding-bottom: 4px; display: flex; align-items: flex-end; }
+
+    /* ─── PREGUNTAS ─── */
+    .pregunta-block { margin-bottom: 14px; }
+    .pregunta-num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 20px; height: 20px; background: var(--amber); color: white;
+      border-radius: 50%; font-size: 9pt; font-weight: 700; margin-right: 6px; flex-shrink: 0;
+    }
+    .pregunta-text { font-size: 10pt; color: var(--forest); font-weight: 600; display: flex; align-items: baseline; margin-bottom: 3px; }
+    .pregunta-hint { font-size: 8.5pt; color: var(--muted); font-style: italic; margin-left: 26px; margin-bottom: 6px; }
+    .answer-textarea {
+      width: 100%; border: 1px solid var(--sand); border-radius: 3px;
+      background: var(--cream); font-family: 'Source Sans 3', sans-serif;
+      font-size: 10pt; color: var(--dark); padding: 8px 10px; resize: vertical;
+      min-height: 64px; outline: none; line-height: 1.6; transition: border-color 0.15s;
+    }
+    .answer-textarea:focus { border-color: var(--green); background: #fff; }
+
+    /* ─── NOTAS / IMÁGENES ─── */
+    .notas-textarea {
+      width: 100%; border: 1px solid var(--sand); border-radius: 3px;
+      background: var(--cream); font-family: 'Source Sans 3', sans-serif;
+      font-size: 10pt; color: var(--dark); padding: 10px; resize: vertical;
+      min-height: 100px; outline: none; line-height: 1.7; transition: border-color 0.15s;
+      margin-top: 6px;
+    }
+    .notas-textarea:focus { border-color: var(--green); background: #fff; }
+
+    /* ─── FILE UPLOAD ─── */
+    .img-upload-area {
+      border: 2px dashed var(--sand); border-radius: 4px;
+      padding: 14px; margin-top: 10px; text-align: center; cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: var(--cream);
+    }
+    .img-upload-area:hover { border-color: var(--sage); background: #f0f5ee; }
+    .img-upload-label { font-size: 8.5pt; color: var(--muted); font-style: italic; display: block; margin-bottom: 6px; }
+    .img-upload-label strong { color: var(--green); font-style: normal; }
+    .img-upload-btn {
+      display: inline-block; padding: 5px 14px; background: none;
+      border: 1.5px solid var(--green); color: var(--green);
+      font-family: 'Source Sans 3', sans-serif; font-size: 8.5pt; font-weight: 600;
+      border-radius: 3px; cursor: pointer; transition: background 0.15s;
+    }
+    .img-upload-btn:hover { background: var(--cream); }
+
+    .img-gallery { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .img-thumb {
+      position: relative; width: 90px; height: 90px;
+      border: 1.5px solid var(--sand); border-radius: 3px; overflow: hidden;
+    }
+    .img-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .img-thumb-remove {
+      position: absolute; top: 2px; right: 2px;
+      background: rgba(0,0,0,0.55); color: #fff; border: none;
+      border-radius: 50%; width: 18px; height: 18px; font-size: 10pt;
+      line-height: 18px; text-align: center; cursor: pointer; padding: 0;
+    }
+    .img-thumb-name {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.55); color: #fff;
+      font-size: 7pt; padding: 2px 4px; white-space: nowrap;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+
+    /* ─── SIZE METER ─── */
+    .size-meter {
+      margin-top: 8px;
+      font-size: 8.5pt;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .size-bar-bg {
+      flex: 1; height: 6px; background: var(--sand); border-radius: 3px; overflow: hidden;
+    }
+    .size-bar-fill {
+      height: 100%; background: var(--sage); border-radius: 3px;
+      transition: width 0.3s, background 0.3s;
+    }
+    .size-bar-fill.over { background: var(--error); }
+    .size-label { min-width: 90px; text-align: right; }
+    .size-label.over { color: var(--error); font-weight: 600; }
+
+    /* ─── ERROR ALERT ─── */
+    .alert-error {
+      background: #fdf0ee; border: 1.5px solid #e8a090; border-radius: 4px;
+      color: var(--error); padding: 10px 14px; font-size: 9.5pt;
+      margin-top: 8px; display: none;
+    }
+    .alert-error.visible { display: block; }
+
+    /* ─── TIP BOX ─── */
+    .tip-box { border-left: 3px solid var(--amber); background: var(--cream); padding: 8px 12px; margin: 8px 0; font-size: 9.5pt; color: var(--dark); }
+    .tip-box strong { color: var(--amber); }
+    .divider { border: none; border-top: 1.5px solid var(--sand); margin: 12px 0; }
+
+    /* ─── FOOTER ─── */
+    .footer { margin-top: 16px; border-top: 1px solid var(--sand); padding-top: 8px; font-size: 8pt; color: var(--muted); display: flex; justify-content: space-between; }
+
+    /* ─── PAGE NAV BUTTONS ─── */
+    .page-nav-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding-top: 14px;
+      border-top: 1.5px solid var(--sand);
+      gap: 12px;
+    }
+    .btn-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 9px 22px;
+      border-radius: 3px;
+      font-family: 'Source Sans 3', sans-serif;
+      font-size: 9.5pt;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.4px;
+      transition: background 0.15s, color 0.15s, opacity 0.15s;
+      border: none;
+      text-decoration: none;
+    }
+    .btn-nav-prev {
+      background: transparent;
+      color: var(--green);
+      border: 1.5px solid var(--green);
+    }
+    .btn-nav-prev:hover { background: var(--cream); }
+    .btn-nav-prev:disabled { opacity: 0.3; cursor: default; }
+
+    .btn-nav-next {
+      background: var(--green);
+      color: #fff;
+      border: 1.5px solid var(--green);
+    }
+    .btn-nav-next:hover { background: #2e5228; }
+
+    .btn-nav-submit {
+      background: var(--amber);
+      color: #fff;
+      border: 1.5px solid var(--amber);
+    }
+    .btn-nav-submit:hover { background: #b8772a; }
+    .btn-nav-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .page-indicator {
+      font-size: 8.5pt;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ─── SUCCESS PAGE ─── */
+    #success-page {
+      display: none;
+      max-width: 210mm;
+      margin: 24px auto;
+      background: #fff;
+      padding: 14mm 16mm;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+      text-align: center;
+    }
+    .success-icon { font-size: 48pt; margin-bottom: 16px; }
+    .success-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20pt;
+      color: var(--forest);
+      margin-bottom: 10px;
+    }
+    .success-msg { font-size: 11pt; color: var(--muted); line-height: 1.7; }
 
     @media (max-width: 640px) {
       .page { margin: 8px; padding: 8mm 6mm; }
@@ -132,16 +397,302 @@
   <input type="hidden" name="from_name" value="Ficha de Trabajo - Cuando volvamos a brotar">
   <input type="checkbox" name="botcheck" id="botcheck" style="display:none;">
 
-  <!-- Páginas (mantengo tu estructura) -->
-  <!-- Página 1, 2 y 3 se mantienen iguales que en tu última versión -->
+<!-- ═══════════════════════ PÁGINA 1 ═══════════════════════ -->
+<div class="page active" id="page-0">
 
-  <!-- Para no hacer el mensaje demasiado largo, te recomiendo copiar las secciones de las 3 páginas desde tu código anterior, ya que están correctas. -->
+  <div class="header">
+    <div class="header-left">
+      <div class="obra-tag">El Musical</div>
+      <div class="obra-title">Cuando volvamos a brotar</div>
+      <div class="obra-subtitle">Idea y libro: Jimena Ramirez</div>
+    </div>
+    <div class="header-right">
+      <div class="ficha-label">Ficha de trabajo</div>
+      <div style="font-size:8.5pt; margin-top:2px;">Actuación - Prof. Coke Ruiz</div>
+    </div>
+  </div>
 
-  <!-- Solo cambio importante está en el script -->
+  <!-- BIENVENIDA -->
+  <div class="bienvenida">
+    <div class="bienvenida-title">Antes de empezar, leé esto con calma.</div>
+    <p>Esta ficha es tuya. Completala <strong>sin apuro y sin pensar demasiado</strong>, la primera imagen que te viene a la cabeza suele ser la más honesta y la más poderosa. No hay respuestas correctas ni incorrectas. Lo que importa es que seas específico/a, que te explayes, que uses detalles concretos. Cuanto más vívido, mejor.</p>
+    <p>Esta es la <strong>primera noción que vamos a tener de tu personaje</strong> y nos va a ayudar a conocerlo juntos. Es el momento de imaginar, de explorar, de jugar sin límites.</p>
+    <p>Si en algún punto sentís miedo de equivocarte al construir el personaje, <em>escribilo igual, con más razón</em>. El miedo es buena señal: significa que estamos pisando territorio verdadero, que algo en vos ya sabe que estás por buen camino.</p>
+    <p>Y por último: <strong>los cambios van a venir, sí o sí</strong>. Durante el proceso el personaje va a mutar, a crecer, a sorprenderte. Eso es normal y es bueno. Todo lo que escribas hoy es solo el punto de partida.</p>
+    <p><em>Bienvenido/a a esta aventura.</em> Visualizate en el escenario brillando con todo el talento que tenés. <strong>TODOS</strong> los personajes tienen un montón para contar, y nuestro trabajo juntos es hacer que todo eso salga a la luz. 🌱</p>
+  </div>
 
-</form>
+  <!-- IDENTITY -->
+  <div class="identity">
+    <div>
+      <div class="field-label">Nombre del actor/actriz</div>
+      <input class="field-input" type="text" id="id-actor" name="actor" placeholder="…">
+    </div>
+    <div>
+      <div class="field-label">Personaje que interpreta</div>
+      <input class="field-input" type="text" id="id-personaje" name="personaje" placeholder="…">
+    </div>
+    <div>
+      <div class="field-label">Fecha</div>
+      <input class="field-input" type="text" id="id-fecha" name="fecha" placeholder="…">
+    </div>
+  </div>
 
+  <!-- SUPERTAREA -->
+  <div class="section-header">
+    <div class="section-dot"></div>
+    <div class="section-title">Supertarea del personaje</div>
+  </div>
+  <div class="section-subtitle">El deseo más profundo. Lo que quiere en toda la obra, no solo en una escena.</div>
+
+  <div class="supertarea-block">
+    <div class="supertarea-label">Mi personaje quiere, en toda la obra...</div>
+    <input class="supertarea-input" type="text" id="supertarea" name="supertarea" placeholder="Formulalo como acción: verbo + objeto…">
+    <div class="supertarea-hint">Ej.: "Demostrar que puede sobrevivir sin nadie"</div>
+  </div>
+
+  <!-- OBJETIVOS POR ESCENA -->
+  <div class="section-header">
+    <div class="section-dot"></div>
+    <div class="section-title">Objetivos y acciones por escena</div>
+  </div>
+  <div class="section-subtitle">Completá una fila por escena en la que aparece tu personaje.</div>
+
+  <div class="tip-box">
+    <strong>Acordate:</strong> La acción responde a "¿qué quiere mi personaje conseguir en esta escena?" No es un estado (<em>estar triste</em>), es un verbo con objeto (<em>convencer a Girasol de que se quede</em>).
+  </div>
+
+  <table class="escena-table" id="escenas-table">
+    <thead>
+      <tr>
+        <th class="td-num">#</th>
+        <th style="width:90px">Escena</th>
+        <th>Objetivo (¿qué quiere?)</th>
+        <th>Acción concreta (verbo + objeto)</th>
+        <th style="width:80px">Con quién / contra quién</th>
+        <th style="width:24px"></th>
+      </tr>
+    </thead>
+    <tbody id="escenas-tbody"></tbody>
+  </table>
+
+  <button type="button" class="add-row-btn" onclick="addEscenaRow()">
+    <span style="font-size:14pt; line-height:1">+</span> Agregar escena
+  </button>
+
+  <div class="footer">
+    <span>Taller de Técnica de Teatro Musical — FGD/TIA 2026</span>
+    <span>Ficha de trabajo — Objetivos y Acciones · Pág. 1</span>
+  </div>
+
+  <div class="page-nav-buttons">
+    <button type="button" class="btn-nav btn-nav-prev" disabled>← Anterior</button>
+    <span class="page-indicator">Página 1 de 3</span>
+    <button type="button" class="btn-nav btn-nav-next" onclick="goTo(1)">Siguiente →</button>
+  </div>
 </div>
+
+<!-- ═══════════════════════ PÁGINA 2 ═══════════════════════ -->
+<div class="page" id="page-1">
+
+  <div class="header">
+    <div class="header-left">
+      <div class="obra-tag">Cuando volvamos a brotar</div>
+      <div class="obra-title" style="font-size:14pt;">Partitura de acciones</div>
+    </div>
+    <div class="header-right">
+      <div class="ficha-label">Ficha de trabajo</div>
+      <div style="font-size:8.5pt; margin-top:2px;">Actuación - Prof. Coke Ruiz</div>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <div class="section-dot"></div>
+    <div class="section-title">Partitura de intenciones</div>
+  </div>
+  <div class="section-subtitle">Para cada escena importante: ¿cómo intenta tu personaje conseguir lo que quiere? ¿Qué le impide lograrlo? ¿Cambia de táctica?</div>
+
+  <div style="display:grid; grid-template-columns: 130px 1fr 1fr 1fr 24px; border-top: 1.5px solid var(--sand); border-bottom: 1.5px solid var(--sand); padding: 4px 0; margin-bottom: 4px;">
+    <div style="font-size:7.5pt; color:var(--muted); text-transform:uppercase; letter-spacing:1px; padding:0 6px;">Escena</div>
+    <div style="font-size:7.5pt; color:var(--muted); text-transform:uppercase; letter-spacing:1px; padding:0 6px;">Intención / táctica</div>
+    <div style="font-size:7.5pt; color:var(--muted); text-transform:uppercase; letter-spacing:1px; padding:0 6px;">Obstáculo</div>
+    <div style="font-size:7.5pt; color:var(--muted); text-transform:uppercase; letter-spacing:1px; padding:0 6px;">¿Consigue lo que quiere?</div>
+    <div></div>
+  </div>
+
+  <div id="partitura-rows"></div>
+
+  <button type="button" class="add-row-btn" onclick="addPartituraRow()">
+    <span style="font-size:14pt; line-height:1">+</span> Agregar escena
+  </button>
+
+  <hr class="divider">
+
+  <div class="section-header">
+    <div class="section-dot"></div>
+    <div class="section-title">Preguntas de creación del personaje</div>
+  </div>
+  <div class="section-subtitle">Respondé con lo primero que te venga. No hay respuestas correctas.</div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">1</span>¿Qué le pasó a tu personaje antes de que empiece la obra?</div>
+    <div class="pregunta-hint">¿Qué perdió? ¿Qué esperaba que no llegó? ¿Qué cargó desde antes?</div>
+    <textarea class="answer-textarea" id="p1" name="p1_antes_de_la_obra" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">2</span>¿Qué es lo que más quiere tu personaje y no puede decir en voz alta?</div>
+    <div class="pregunta-hint">El deseo que esconde. La necesidad que no nombra.</div>
+    <textarea class="answer-textarea" id="p2" name="p2_deseo_secreto" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">3</span>¿Qué tiene miedo de perder?</div>
+    <div class="pregunta-hint">¿Su lugar en el jardín? ¿El recuerdo de cómo era? ¿A alguien?</div>
+    <textarea class="answer-textarea" id="p3" name="p3_miedo_a_perder" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">4</span>¿Cuándo fue la última vez que tu personaje fue feliz en el jardín?</div>
+    <div class="pregunta-hint">Una imagen concreta. Qué hacía, con quién, cómo estaba el jardín.</div>
+    <textarea class="answer-textarea" id="p4" name="p4_ultima_felicidad" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <div class="footer">
+    <span>Taller de Técnica de Teatro Musical — FGD/TIA 2026</span>
+    <span>Ficha de trabajo — Partitura y Preguntas · Pág. 2</span>
+  </div>
+
+  <div class="page-nav-buttons">
+    <button type="button" class="btn-nav btn-nav-prev" onclick="goTo(0)">← Anterior</button>
+    <span class="page-indicator">Página 2 de 3</span>
+    <button type="button" class="btn-nav btn-nav-next" onclick="goTo(2)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════ PÁGINA 3 ═══════════════════════ -->
+<div class="page" id="page-2">
+
+  <div class="header">
+    <div class="header-left">
+      <div class="obra-tag">Cuando volvamos a brotar</div>
+      <div class="obra-title" style="font-size:14pt;">Preguntas de creación</div>
+      <div class="obra-subtitle">Las RELACIONES, el ARCO y el CIERRE</div>
+    </div>
+    <div class="header-right">
+      <div class="ficha-label">Ficha de trabajo</div>
+      <div style="font-size:8.5pt; margin-top:2px;">Actuación - Prof. Coke Ruiz</div>
+    </div>
+  </div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">5</span>¿Quién es la persona más importante del jardín para tu personaje?</div>
+    <div class="pregunta-hint">¿Quién lo mueve, lo amenaza, lo calma o lo enloquece?</div>
+    <textarea class="answer-textarea" id="p5" name="p5_persona_mas_importante" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">6</span>¿Qué piensa tu personaje del Jardinero?</div>
+    <div class="pregunta-hint">¿Lo espera? ¿Le teme? ¿Lo odia? ¿Lo ignora? ¿Le importa?</div>
+    <textarea class="answer-textarea" id="p6" name="p6_jardinero" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">7</span>¿Tu personaje cree que el jardín va a volver a ser lo que era? ¿Por qué?</div>
+    <div class="pregunta-hint">Fe, desesperanza, indiferencia. ¿Desde dónde responde?</div>
+    <textarea class="answer-textarea" id="p7" name="p7_jardin_futuro" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">8</span>¿Qué cambió en tu personaje al final de la obra?</div>
+    <div class="pregunta-hint">No lo que le pasó. Lo que cambió adentro.</div>
+    <textarea class="answer-textarea" id="p8" name="p8_cambio_interno" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <div class="pregunta-block">
+    <div class="pregunta-text"><span class="pregunta-num">9</span>¿Hay algo que tu personaje haría distinto si pudiera volver al principio?</div>
+    <textarea class="answer-textarea" id="p9" name="p9_haria_distinto" placeholder="Escribí tu respuesta acá…"></textarea>
+  </div>
+
+  <hr class="divider" style="margin-top:6px;">
+
+  <!-- NOTAS LIBRES -->
+  <div class="section-header">
+    <div class="section-dot" style="background: var(--sage);"></div>
+    <div class="section-title">Notas libres / Imágenes internas</div>
+  </div>
+  <div class="section-subtitle">Escribí, anotá ideas, canciones que te inspiran, sensaciones…</div>
+
+  <div class="tip-box" style="margin-bottom:10px;">
+    <strong>¿Qué tipo de imágenes podés subir?</strong> Algo que te evoque al personaje: una planta, un animal, una textura, una forma, un color. Máximo <strong>3 imágenes · 4 MB total</strong> (JPG, PNG, GIF, WebP).
+  </div>
+
+  <textarea class="notas-textarea" id="notas" name="notas_libres" placeholder="Espacio libre para escribir, anotar ideas, canciones que te inspiran, sensaciones…"></textarea>
+
+  <!-- Upload real de archivos para Web3Forms -->
+  <div class="img-upload-area" id="upload-area" onclick="document.getElementById('img-file-input').click()">
+    <span class="img-upload-label">
+      <strong>Agregar imágenes de inspiración</strong> — plantas, animales, formas, dibujos, colores, texturas.<br>
+      <em>Máximo 3 imágenes · 4 MB total · JPG, PNG, GIF o WebP</em>
+    </span>
+    <button type="button" class="img-upload-btn">+ Elegir imágenes</button>
+  </div>
+
+  <!-- Input real tipo file que Web3Forms puede adjuntar (multiple via JS) -->
+  <!-- Web3Forms estándar solo soporta 1 archivo; usamos múltiples inputs nombrados -->
+  <input type="file" id="img-file-input" accept="image/jpeg,image/png,image/gif,image/webp" multiple style="display:none;" onchange="handleImgUpload(event)">
+
+  <!-- Inputs hidden que alojarán los archivos seleccionados (se reemplazan dinámicamente) -->
+  <div id="file-inputs-container"></div>
+
+  <div id="size-meter-container" style="display:none;">
+    <div class="size-meter">
+      <span id="size-label-text" class="size-label">0 KB / 4 MB</span>
+      <div class="size-bar-bg"><div class="size-bar-fill" id="size-bar" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <div class="alert-error" id="alert-size">
+    ⚠ El total de imágenes supera los 4 MB. Por favor eliminá alguna antes de enviar.
+  </div>
+  <div class="alert-error" id="alert-count">
+    ⚠ Podés adjuntar como máximo 3 imágenes. Por favor eliminá las que sobran.
+  </div>
+
+  <div class="img-gallery" id="img-gallery"></div>
+
+  <div class="tip-box" style="margin-top: 10px;">
+    <strong>Recordá:</strong> La acción no es lo que sentís. Es lo que hacés para conseguir lo que querés. Cuando la acción es verdadera y genuina, el sentimiento viene solo.
+  </div>
+
+  <div class="footer">
+    <span>Taller de Técnica de Teatro Musical — FGD/TIA 2026</span>
+    <span>Ficha de trabajo — Preguntas de creación · Pág. 3</span>
+  </div>
+
+  <div class="page-nav-buttons">
+    <button type="button" class="btn-nav btn-nav-prev" onclick="goTo(1)">← Anterior</button>
+    <span class="page-indicator">Página 3 de 3</span>
+    <button type="submit" class="btn-nav btn-nav-submit" id="submit-btn">Enviar ficha ✓</button>
+  </div>
+</div>
+
+</form><!-- fin del form -->
+
+<!-- SUCCESS PAGE -->
+<div id="success-page">
+  <div class="success-icon">🌱</div>
+  <div class="success-title">¡Ficha enviada con éxito!</div>
+  <p class="success-msg">
+    Gracias por completar tu ficha de trabajo.<br>
+    El profesor Coke Ruiz la recibirá pronto.
+  </p>
+  <button onclick="location.reload()" style="margin-top:20px; padding:10px 24px; background:var(--green); color:white; border:none; border-radius:4px; cursor:pointer; font-family:'Source Sans 3',sans-serif; font-size:11pt;">
+    Completar otra ficha
+  </button>
+</div>
+
+</div><!-- end page-wrapper -->
 
 <script>
   // ── CONSTANTES ───────────────────────────────────────────
